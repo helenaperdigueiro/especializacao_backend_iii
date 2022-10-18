@@ -9,8 +9,6 @@ const (
 	maximum = "maximum"
 )
 
-
-
 func main() {
 
 	//guiado
@@ -41,10 +39,15 @@ func main() {
 	salarioEmpregadoA, _ := calcularSalario(600, "A")
 	salarioEmpregadoB, _ := calcularSalario(600, "B")
 	salarioEmpregadoC, _ := calcularSalario(600, "C")
+	test, err := calcularSalario(600, "D")
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println("Salario do empregado A:", salarioEmpregadoA)
 	fmt.Println("Salario do empregado B:", salarioEmpregadoB)
 	fmt.Println("Salario do empregado C:", salarioEmpregadoC)
+	fmt.Println("Salario do empregado C:", test)
 
 }
 
