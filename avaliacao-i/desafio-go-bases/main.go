@@ -7,11 +7,13 @@ import (
 )
 
 func main() {
-	totalTickets, message, err := tickets.GetTotalTickets("Brazil")
+	totalTicketsByDestination, message, err := tickets.GetAllTicketsByDestination("Brazil")
 	if err != nil {
 		panic("Something went wrong. Check parameters and try again.")
 	}
 	
-	fmt.Printf("Total tickets returned: %d\nMessage returned: %s", totalTickets, message)
+	fmt.Printf("Total tickets returned: %d\nMessage returned: %s", totalTicketsByDestination, message)
 
+	totalTicketsByPeriod, err := tickets.GetAllTicketsByPeriod("early morning")
+	fmt.Println(totalTicketsByPeriod)
 }
