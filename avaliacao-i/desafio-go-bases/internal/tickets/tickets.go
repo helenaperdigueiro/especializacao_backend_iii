@@ -67,6 +67,7 @@ func GetRangeForPeriod(period string) (int, int, error) {
 	default:
 		return minimum, maximum, fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
 	}
+	return minimum, maximum, nil
 }
 
 // exemplo 2
