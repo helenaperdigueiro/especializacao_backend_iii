@@ -47,8 +47,7 @@ const (
 	evening string = "evening"
 )
 
-// exemplo 2
-func GetAllTicketsByPeriod(period string) (int, string, error) {
+func GetRangeForPeriod(period string) (int, int, error) {
 	var minimum int
 	var maximum int
 
@@ -66,8 +65,13 @@ func GetAllTicketsByPeriod(period string) (int, string, error) {
 		minimum = 20
 		maximum = 23
 	default:
-		return 0, "", fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
+		return minimum, maximum, fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
 	}
+}
+
+// exemplo 2
+func GetAllTicketsByPeriod(period string) (int, string, error) {
+	minimum, maximum, err := GetRangeForPeriod(period)
 
 	res, err := os.ReadFile("./tickets.csv")
 	if err != nil {
