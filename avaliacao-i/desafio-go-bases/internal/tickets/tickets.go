@@ -12,7 +12,7 @@ type Ticket struct {
 	name string
 	email string
 	destination string
-	departure time.Time
+	departure string
 	price float32
 }
 
@@ -40,14 +40,15 @@ func GetAllTicketsByDestination(destination string) (int, string, error) {
 	return totalTickets, message, nil
 }
 
+const (
+	earlyMorning string = "early morning"
+	morning string = "morning"
+	afternoon string = "afternoon"
+	evening string = "evening"
+)
+
 // exemplo 2
 func GetAllTicketsByPeriod(period string) (int, error) {
-	res, err := os.ReadFile("./tickets.csv")
-	if err != nil {
-		panic("Could not read file.")
-	}
-
-	tickets := strings.Split(string(res), "\n")
 	var minimum int
 	var maximum int
 
@@ -64,7 +65,16 @@ func GetAllTicketsByPeriod(period string) (int, error) {
 	case "evening":
 		minimum = 20
 		maximum = 23
+	default:
+		return 0, fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
 	}
+
+	res, err := os.ReadFile("./tickets.csv")
+	if err != nil {
+		panic("Could not read file.")
+	}
+
+	tickets := strings.Split(string(res), "\n")
 
 	totalTickets := 0
 
