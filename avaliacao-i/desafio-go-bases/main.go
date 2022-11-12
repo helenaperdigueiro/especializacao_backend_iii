@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Println("---")
 
-	totalTicketsByPeriod, messagePeriod, err := tickets.GetAllTicketsByPeriod("x")
+	totalTicketsByPeriod, messagePeriod, err := tickets.GetAllTicketsByPeriod("early morning")
 	if err != nil {
 		panic("Something went wrong. Check parameters and try again.")
 	}
@@ -26,5 +26,11 @@ func main() {
 
 	fmt.Println("---")
 
+	averageTicketsPerDestinations, messageAverage, err := tickets.GetAverageForTicketsPerDestinations()
+	if err != nil {
+		panic("Something went wrong. Check parameters and try again.")
+	}
+	fmt.Printf("Total tickets returned: %d\nMessage returned: %s\n", averageTicketsPerDestinations, messageAverage)
 
+	fmt.Println("---")
 }

@@ -16,7 +16,6 @@ type Ticket struct {
 	price float32
 }
 
-// exemplo 1
 func GetAllTicketsByDestination(destination string) (int, string, error) {
 	res, err := os.ReadFile("./tickets.csv")
 	if err != nil {
@@ -70,7 +69,6 @@ func GetRangeForPeriod(period string) (int, int, error) {
 	return minimum, maximum, nil
 }
 
-// exemplo 2
 func GetAllTicketsByPeriod(period string) (int, string, error) {
 	minimum, maximum, err := GetRangeForPeriod(period)
 	if err != nil {
@@ -100,8 +98,56 @@ func GetAllTicketsByPeriod(period string) (int, string, error) {
 	message := fmt.Sprintf("Total tickets for period %s: %d", period, totalTickets)
 
 	return totalTickets, message, nil
-
 }
 
-// exemplo 3
-// func AverageDestination(destination string, total int) (int, error) {}
+func containsInArray(arrayOfElements []string, element string) bool {
+	for _, elementInArray := range arrayOfElements {
+		if elementInArray == element {
+			return true
+		}
+	}
+	return false
+}
+
+func GetDistinctDestinations() (int) {
+	res, err := os.ReadFile("./tickets.csv")
+	if err != nil {
+		panic("Could not read file.")
+	}
+
+	tickets := strings.Split(string(res), "\n")
+	distinctDestinations := []string{}
+
+	for i := 0; i < len(tickets); i++ {
+		attributes := strings.Split(tickets[i], ",")
+		destination := attributes[3]
+
+		if !containsInArray(distinctDestinations, destination) {
+			distinctDestinations = append(distinctDestinations, destination)
+		}
+	}
+
+	totalDistinctDestinations := len(distinctDestinations)
+
+	return totalDistinctDestinations
+}
+
+func GetAverageForTicketsPerDestinations() (int, string, error) {
+	res, err := os.ReadFile("./tickets.csv")
+	if err != nil {
+		panic("Could not read file.")
+	}
+
+	tickets := strings.Split(string(res), "\n")
+
+	totalTickets := len(tickets)
+	totalDistinctDestinations := GetDistinctDestinations()
+	var averageTicketsPerDestinations int
+	if totalDistinctDestinations != 0 {
+		averageTicketsPerDestinations = totalTickets / totalDistinctDestinations
+	}
+	
+	message := fmt.Sprintf("Average tickets per destinations: %d", averageTicketsPerDestinations)
+
+	return averageTicketsPerDestinations, message, nil
+}
