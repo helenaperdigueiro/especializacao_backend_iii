@@ -14,6 +14,7 @@ func main() {
 	
 	fmt.Printf("Total tickets returned: %d\nMessage returned: %s", totalTicketsByDestination, message)
 
-	totalTicketsByPeriod, err := tickets.GetAllTicketsByPeriod("early morning")
+	totalTicketsByPeriod, err := tickets.GetAllTicketsByPeriod("x")
 	fmt.Println(totalTicketsByPeriod)
+	fmt.Println(err)
 }

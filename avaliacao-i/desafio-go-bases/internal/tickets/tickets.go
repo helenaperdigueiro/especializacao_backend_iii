@@ -53,16 +53,16 @@ func GetAllTicketsByPeriod(period string) (int, error) {
 	var maximum int
 
 	switch period {
-	case "early morning":
+	case earlyMorning:
 		minimum = 0
 		maximum = 6
-	case "morning":
+	case morning:
 		minimum = 7
 		maximum = 12
-	case "afternoon":
+	case afternoon:
 		minimum = 13
 		maximum = 19
-	case "evening":
+	case evening:
 		minimum = 20
 		maximum = 23
 	default:
