@@ -65,7 +65,7 @@ func GetRangeForPeriod(period string) (int, int, error) {
 		minimum = 20
 		maximum = 23
 	default:
-		return minimum, maximum, fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
+		return 0, 0, fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
 	}
 	return minimum, maximum, nil
 }
@@ -73,6 +73,9 @@ func GetRangeForPeriod(period string) (int, int, error) {
 // exemplo 2
 func GetAllTicketsByPeriod(period string) (int, string, error) {
 	minimum, maximum, err := GetRangeForPeriod(period)
+	if err != nil {
+		panic(err)
+	}
 
 	res, err := os.ReadFile("./tickets.csv")
 	if err != nil {
