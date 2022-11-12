@@ -48,7 +48,7 @@ const (
 )
 
 // exemplo 2
-func GetAllTicketsByPeriod(period string) (int, error) {
+func GetAllTicketsByPeriod(period string) (int, string, error) {
 	var minimum int
 	var maximum int
 
@@ -66,7 +66,7 @@ func GetAllTicketsByPeriod(period string) (int, error) {
 		minimum = 20
 		maximum = 23
 	default:
-		return 0, fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
+		return 0, "", fmt.Errorf("Invalid period: %s. Valid options: %s, %s, %s, %s.", period, earlyMorning, morning, afternoon, evening)
 	}
 
 	res, err := os.ReadFile("./tickets.csv")
@@ -89,7 +89,9 @@ func GetAllTicketsByPeriod(period string) (int, error) {
 		}
 	}
 
-	return totalTickets, nil
+	message := fmt.Sprintf("Total tickets for period %s: %d", period, totalTickets)
+
+	return totalTickets, message, nil
 
 }
 
