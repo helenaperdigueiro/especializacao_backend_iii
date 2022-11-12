@@ -70,7 +70,7 @@ func GetAllTicketsByPeriod(period string) (int, error) {
 
 	for i := 0; i < len(tickets); i++ {
 		attributes := strings.Split(tickets[i], ",")
-		time, err := strconv.Atoi(strings.Split(attributes[4])[0])
+		time, err := strconv.Atoi(strings.Split(attributes[4], ":")[0])
 		if err != nil {
 			panic("Could not get departure time.")
 		}
