@@ -8,15 +8,15 @@ import (
 )
 
 type Ticket struct {
-	id int
-	name string
-	email string
-	destination string
-	departure string
-	price float32
+	Id string
+	Name string
+	Email string
+	Destination string
+	Departure string
+	Price string
 }
 
-func GetAllTicketsByDestination(destination string) (int, string, error) {
+func GetAllTicketsByDestination(destination string) (int, string, []Ticket, error) {
 	res, err := os.ReadFile("./tickets.csv")
 	if err != nil {
 		panic("Could not read file.")
@@ -24,19 +24,29 @@ func GetAllTicketsByDestination(destination string) (int, string, error) {
 
 	tickets := strings.Split(string(res), "\n")
 
-	totalTickets := 0
+	var ticketsFromDestination []Ticket
 
 	for i := 0; i < len(tickets); i++ {
 		attributes := strings.Split(tickets[i], ",")
 
 		if attributes[3] == destination {
-			totalTickets++
+			ticket := Ticket{
+				Id: attributes[0],
+				Name: attributes[1],
+				Email: attributes[2],
+				Destination: attributes[3],
+				Departure: attributes[4],
+				Price: attributes[5],
+			}
+			ticketsFromDestination = append(ticketsFromDestination, ticket)
 		}
 
 	}
+
+	totalTickets := len(ticketsFromDestination)
 	message := fmt.Sprintf("Total tickets for %s: %d", destination, totalTickets)
 
-	return totalTickets, message, nil
+	return totalTickets, message, ticketsFromDestination, nil
 }
 
 const (
@@ -46,7 +56,7 @@ const (
 	evening string = "evening"
 )
 
-func GetRangeForPeriod(period string) (int, int, error) {
+func getRangeForPeriod(period string) (int, int, error) {
 	var minimum int
 	var maximum int
 
@@ -69,8 +79,8 @@ func GetRangeForPeriod(period string) (int, int, error) {
 	return minimum, maximum, nil
 }
 
-func GetAllTicketsByPeriod(period string) (int, string, error) {
-	minimum, maximum, err := GetRangeForPeriod(period)
+func GetAllTicketsByPeriod(period string) (int, string, []Ticket, error) {
+	minimum, maximum, err := getRangeForPeriod(period)
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +92,7 @@ func GetAllTicketsByPeriod(period string) (int, string, error) {
 
 	tickets := strings.Split(string(res), "\n")
 
-	totalTickets := 0
+	var ticketsFromPeriod []Ticket
 
 	for i := 0; i < len(tickets); i++ {
 		attributes := strings.Split(tickets[i], ",")
@@ -90,14 +100,23 @@ func GetAllTicketsByPeriod(period string) (int, string, error) {
 		if err != nil {
 			panic("Could not get departure time.")
 		}
-		if time >= minimum || time <= maximum {
-			totalTickets++;
+		if time >= minimum && time <= maximum {
+			ticket := Ticket{
+				Id: attributes[0],
+				Name: attributes[1],
+				Email: attributes[2],
+				Destination: attributes[3],
+				Departure: attributes[4],
+				Price: attributes[5],
+			}
+			ticketsFromPeriod = append(ticketsFromPeriod, ticket)
 		}
 	}
 
+	totalTickets := len(ticketsFromPeriod)
 	message := fmt.Sprintf("Total tickets for period %s: %d", period, totalTickets)
 
-	return totalTickets, message, nil
+	return totalTickets, message, ticketsFromPeriod, nil
 }
 
 func containsInArray(arrayOfElements []string, element string) bool {
@@ -109,7 +128,7 @@ func containsInArray(arrayOfElements []string, element string) bool {
 	return false
 }
 
-func GetDistinctDestinations() (int) {
+func GetDistinctDestinations() (int, []string) {
 	res, err := os.ReadFile("./tickets.csv")
 	if err != nil {
 		panic("Could not read file.")
@@ -129,7 +148,7 @@ func GetDistinctDestinations() (int) {
 
 	totalDistinctDestinations := len(distinctDestinations)
 
-	return totalDistinctDestinations
+	return totalDistinctDestinations, distinctDestinations
 }
 
 func GetAverageForTicketsPerDestinations() (int, string, error) {
@@ -141,7 +160,7 @@ func GetAverageForTicketsPerDestinations() (int, string, error) {
 	tickets := strings.Split(string(res), "\n")
 
 	totalTickets := len(tickets)
-	totalDistinctDestinations := GetDistinctDestinations()
+	totalDistinctDestinations, _ := GetDistinctDestinations()
 	var averageTicketsPerDestinations int
 	if totalDistinctDestinations != 0 {
 		averageTicketsPerDestinations = totalTickets / totalDistinctDestinations

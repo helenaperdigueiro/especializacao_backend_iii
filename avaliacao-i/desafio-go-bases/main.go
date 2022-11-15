@@ -9,20 +9,21 @@ import (
 func main() {
 	fmt.Println("---")
 
-	totalTicketsByDestination, messageDestination, err := tickets.GetAllTicketsByDestination("Brazil")
+	totalTicketsByDestination, messageDestination, ticketsFromDestination, err := tickets.GetAllTicketsByDestination("Brazil")
 	if err != nil {
 		panic("Something went wrong. Check parameters and try again.")
 	}
 	
-	fmt.Printf("Total tickets returned: %d\nMessage returned: %s\n", totalTicketsByDestination, messageDestination)
+	fmt.Printf("Total tickets returned: %d\nMessage returned: %s\nTickets returned: %s\n", totalTicketsByDestination, messageDestination, ticketsFromDestination)
 
 	fmt.Println("---")
 
-	totalTicketsByPeriod, messagePeriod, err := tickets.GetAllTicketsByPeriod("early morning")
+	totalTicketsByPeriod, messagePeriod, ticketsFromPeriod, err := tickets.GetAllTicketsByPeriod("early morning")
 	if err != nil {
 		panic("Something went wrong. Check parameters and try again.")
 	}
-	fmt.Printf("Total tickets returned: %d\nMessage returned: %s\n", totalTicketsByPeriod, messagePeriod)
+
+	fmt.Printf("Total tickets returned: %d\nMessage returned: %s\nTickets returned: %s\n", totalTicketsByPeriod, messagePeriod, ticketsFromPeriod)
 
 	fmt.Println("---")
 
@@ -30,7 +31,15 @@ func main() {
 	if err != nil {
 		panic("Something went wrong. Check parameters and try again.")
 	}
+
 	fmt.Printf("Total tickets returned: %d\nMessage returned: %s\n", averageTicketsPerDestinations, messageAverage)
 
 	fmt.Println("---")
+
+	totalDistinctDestinations, distinctDestinations := tickets.GetDistinctDestinations()
+
+	fmt.Printf("Total distinct destinations: %d\nDistinct destinations: %s\n", totalDistinctDestinations, distinctDestinations)
+
+	fmt.Println("---")
+
 }
