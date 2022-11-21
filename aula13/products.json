@@ -1,0 +1,6 @@
+[{"id":"1","name":"shirt","price":10.50,"inventory":"test","code":"ABC001","isPublished":false,"createdAt":"2022-11-21"},
+{"id":"2","name":"shoes","price":100.90,"inventory":"test","code":"ABC002","isPublished":false,"createdAt":"2022-11-21"},
+{"id":"3","name":"hat","price":20.50,"inventory":"test","code":"ABC003","isPublished":false,"createdAt":"2022-11-21"},
+{"id":"4","name":"jeans","price":145.50,"inventory":"test","code":"ABC004","isPublished":false,"createdAt":"2022-11-21"},
+{"id":"5","name":"jacket","price":210.50,"inventory":"test","code":"ABC005","isPublished":false,"createdAt":"2022-11-21"},
+{"id":"6","name":"socks","price":5.50,"inventory":"test","code":"ABC006","isPublished":false,"createdAt":"2022-11-21"}]
