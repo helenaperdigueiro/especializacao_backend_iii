@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -35,6 +36,7 @@ func main() {
 
 	app.GET("/products", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, products)
+		fmt.Println(products)
 	})
 
 	app.Run(":8080")
