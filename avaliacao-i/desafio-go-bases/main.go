@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Println("---")
 
-	totalTicketsByPeriod, messagePeriod, ticketsFromPeriod, err := tickets.GetAllTicketsByPeriod("early morning")
+	totalTicketsByPeriod, messagePeriod, ticketsFromPeriod, err := tickets.GetAllTicketsByPeriod("evening")
 	if err != nil {
 		panic("Something went wrong. Check parameters and try again.")
 	}

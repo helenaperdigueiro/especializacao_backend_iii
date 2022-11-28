@@ -91,7 +91,7 @@ func GetAllTicketsByPeriod(period string) (int, string, []Ticket, error) {
 	}
 
 	tickets := strings.Split(string(res), "\n")
-
+	
 	var ticketsFromPeriod []Ticket
 
 	for i := 0; i < len(tickets); i++ {
