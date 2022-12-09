@@ -1,4 +1,4 @@
-package patient
+package dentist
 
 import (
 	"errors"
@@ -7,32 +7,32 @@ import (
 )
 
 type Repository interface {
-	ReadById(id int) (domain.Patient, error)
-	Create(patient domain.Patient) (domain.Patient, error)
-	Update(patient domain.Patient) (domain.Patient, error)
-	Patch(patient domain.Patient) (domain.Patient, error)
+	ReadById(id int) (domain.Dentist, error)
+	Create(dentist domain.Dentist) (domain.Dentist, error)
+	Update(dentist domain.Dentist) (domain.Dentist, error)
+	Patch(dentist domain.Dentist) (domain.Dentist, error)
 	Delete(id int) error
 }
 
 type repository struct {
-	storage store.StoreInterfacePatient
+	storage store.StoreInterfaceDentist
 }
 
 // NewRepository crea un nuevo repositorio
-func NewRepository(storage store.StoreInterfacePatient) Repository {
+func NewRepository(storage store.StoreInterfaceDentist) Repository {
 	return &repository{storage}
 }
 
-func (r *repository) ReadById(id int) (domain.Patient, error) {
+func (r *repository) ReadById(id int) (domain.Dentist, error) {
 
 }
-func (r *repository) Create(patient domain.Patient) (domain.Patient, error) {
+func (r *repository) Create(dentist domain.Dentist) (domain.Dentist, error) {
 	
 }
-func (r *repository) Update(patient domain.Patient) (domain.Patient, error) {
+func (r *repository) Update(dentist domain.Dentist) (domain.Dentist, error) {
 	
 }
-func (r *repository) Patch(patient domain.Patient) (domain.Patient, error) {
+func (r *repository) Patch(dentist domain.Dentist) (domain.Dentist, error) {
 	
 }
 func (r *repository) Delete(id int) error {

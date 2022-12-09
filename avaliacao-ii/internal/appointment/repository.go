@@ -1,4 +1,4 @@
-package patient
+package appointment
 
 import (
 	"errors"
@@ -7,32 +7,39 @@ import (
 )
 
 type Repository interface {
-	ReadById(id int) (domain.Patient, error)
-	Create(patient domain.Patient) (domain.Patient, error)
-	Update(patient domain.Patient) (domain.Patient, error)
-	Patch(patient domain.Patient) (domain.Patient, error)
+	ReadById(id int) (domain.Appointment, error)
+	ReadByRg(rg string) (domain.Appointment, error)
+	CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
+	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error)
+	Update(appointment domain.Appointment) (domain.Appointment, error)
+	Patch(appointment domain.Appointment) (domain.Appointment, error)
 	Delete(id int) error
 }
 
 type repository struct {
-	storage store.StoreInterfacePatient
+	storage store.StoreInterfaceAppointment
 }
 
-// NewRepository crea un nuevo repositorio
-func NewRepository(storage store.StoreInterfacePatient) Repository {
+func NewRepository(storage store.StoreInterfaceAppointment) Repository {
 	return &repository{storage}
 }
 
-func (r *repository) ReadById(id int) (domain.Patient, error) {
+func (r *repository) ReadById(id int) (domain.Appointment, error) {
 
 }
-func (r *repository) Create(patient domain.Patient) (domain.Patient, error) {
+func (r *repository) ReadByRg(rg string) (domain.Appointment, error) {
 	
 }
-func (r *repository) Update(patient domain.Patient) (domain.Patient, error) {
+func (r *repository) CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error) {
 	
 }
-func (r *repository) Patch(patient domain.Patient) (domain.Patient, error) {
+func (r *repository) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error) {
+	
+}
+func (r *repository) Update(appointment domain.Appointment) (domain.Appointment, error) {
+	
+}
+func (r *repository) Patch(appointment domain.Appointment) (domain.Appointment, error) {
 	
 }
 func (r *repository) Delete(id int) error {

@@ -1,41 +1,39 @@
-package patient
+package dentist
 
 import (
 	"errors"
 	"avaliacao-ii/internal/domain"
-	"avaliacao-ii/pkg/store"
 )
 
-type Repository interface {
-	ReadById(id int) (domain.Patient, error)
-	Create(patient domain.Patient) (domain.Patient, error)
-	Update(patient domain.Patient) (domain.Patient, error)
-	Patch(patient domain.Patient) (domain.Patient, error)
+type Service interface {
+	ReadById(id int) (domain.Dentist, error)
+	Create(dentist domain.Dentist) (domain.Dentist, error)
+	Update(dentist domain.Dentist) (domain.Dentist, error)
+	Patch(dentist domain.Dentist) (domain.Dentist, error)
 	Delete(id int) error
 }
 
-type repository struct {
-	storage store.StoreInterfacePatient
+type service struct {
+	r Repository
 }
 
-// NewRepository crea un nuevo repositorio
-func NewRepository(storage store.StoreInterfacePatient) Repository {
-	return &repository{storage}
+func NewService(r Repository) Service {
+	return &service{r}
 }
 
-func (r *repository) ReadById(id int) (domain.Patient, error) {
+func (s *service) ReadById(id int) (domain.Dentist, error) {
 
 }
-func (r *repository) Create(patient domain.Patient) (domain.Patient, error) {
+func (s *service) Create(dentist domain.Dentist) (domain.Dentist, error) {
 	
 }
-func (r *repository) Update(patient domain.Patient) (domain.Patient, error) {
+func (s *service) Update(dentist domain.Dentist) (domain.Dentist, error) {
 	
 }
-func (r *repository) Patch(patient domain.Patient) (domain.Patient, error) {
+func (s *service) Patch(dentist domain.Dentist) (domain.Dentist, error) {
 	
 }
-func (r *repository) Delete(id int) error {
+func (s *service) Delete(id int) error {
 	
 }
 
