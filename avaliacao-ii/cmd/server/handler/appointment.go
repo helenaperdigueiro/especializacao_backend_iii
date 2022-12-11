@@ -22,25 +22,25 @@ func NewAppointmentHandler(s appointment.Service) *appointmentHandler {
 	}
 }
 
-func (h *appointmentHandler) ReadById(id int) (domain.Appointment, error) {
+func (h *appointmentHandler) ReadById(id int) gin.HandlerFunc {
 
 }
-func (h *appointmentHandler) ReadByRg(rg string) (domain.Appointment, error) {
+func (h *appointmentHandler) ReadByRg(rg string) gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error) {
+func (h *appointmentHandler) CreateById(appointment domain.Appointment, idPatient int, idDentist int) gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error) {
+func (h *appointmentHandler) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) Update(appointment domain.Appointment) (domain.Appointment, error) {
+func (h *appointmentHandler) Update(appointment domain.Appointment) gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) Patch(appointment domain.Appointment) (domain.Appointment, error) {
+func (h *appointmentHandler) Patch(appointment domain.Appointment) gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) Delete(id int) error {
+func (h *appointmentHandler) Delete(id int) gin.HandlerFunc {
 	
 }
 

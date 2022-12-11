@@ -18,7 +18,6 @@ type repository struct {
 	storage store.StoreInterfacePatient
 }
 
-// NewRepository crea un nuevo repositorio
 func NewRepository(storage store.StoreInterfacePatient) Repository {
 	return &repository{storage}
 }

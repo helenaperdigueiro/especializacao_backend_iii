@@ -16,25 +16,25 @@ type dentistHandler struct {
 	s dentist.Service
 }
 
-func NewdentistHandler(s dentist.Service) *dentistHandler {
+func NewDentistHandler(s dentist.Service) *dentistHandler {
 	return &dentistHandler{
 		s: s,
 	}
 }
 
-func (h *dentistHandler) ReadById(id int) (domain.Dentist, error) {
+func (h *dentistHandler) ReadById(id int) gin.HandlerFunc {
 
 }
-func (h *dentistHandler) Create(dentist domain.Dentist) (domain.Dentist, error) {
+func (h *dentistHandler) Create(dentist domain.Dentist) gin.HandlerFunc {
 	
 }
-func (h *dentistHandler) Update(dentist domain.Dentist) (domain.Dentist, error) {
+func (h *dentistHandler) Update(dentist domain.Dentist) gin.HandlerFunc {
 	
 }
-func (h *dentistHandler) Patch(dentist domain.Dentist) (domain.Dentist, error) {
+func (h *dentistHandler) Patch(dentist domain.Dentist) gin.HandlerFunc {
 	
 }
-func (h *dentistHandler) Delete(id int) error {
+func (h *dentistHandler) Delete(id int) gin.HandlerFunc {
 	
 }
 

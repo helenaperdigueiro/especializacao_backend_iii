@@ -3,7 +3,6 @@ package appointment
 import (
 	"errors"
 	"avaliacao-ii/internal/domain"
-	"avaliacao-ii/pkg/store"
 )
 
 type Service interface {
