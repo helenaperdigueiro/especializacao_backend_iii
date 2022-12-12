@@ -2,13 +2,15 @@ package handler
 
 import (
 	"errors"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
-	"avaliacao-ii/internal/domain"
 	"avaliacao-ii/internal/dentist"
+	"avaliacao-ii/internal/domain"
 	"avaliacao-ii/pkg/web"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,249 +24,145 @@ func NewDentistHandler(s dentist.Service) *dentistHandler {
 	}
 }
 
-func (h *dentistHandler) ReadById(id int) gin.HandlerFunc {
-
-}
-func (h *dentistHandler) Create(dentist domain.Dentist) gin.HandlerFunc {
-	
-}
-func (h *dentistHandler) Update(dentist domain.Dentist) gin.HandlerFunc {
-	
-}
-func (h *dentistHandler) Patch(dentist domain.Dentist) gin.HandlerFunc {
-	
-}
-func (h *dentistHandler) Delete(id int) gin.HandlerFunc {
-	
-}
-
-// Get obtiene un producto por id
-func (h *productHandler) GetByID() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		idParam := c.Param("id")
-		id, err := strconv.Atoi(idParam)
+func (h *dentistHandler) ReadById() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.Atoi(ctx.Param("id"))
 		if err != nil {
-			web.Failure(c, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
-		product, err := h.s.GetByID(id)
+		dentist, err := h.s.ReadById(id)
 		if err != nil {
-			web.Failure(c, 404, errors.New("product not found"))
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(c, 200, product)
+		web.Success(ctx, http.StatusOK, dentist)
 	}
 }
 
-// validateEmptys valida que los campos no esten vacios
-func validateEmptys(product *domain.Product) (bool, error) {
-	switch {
-	case product.Name == "" || product.CodeValue == "" || product.Expiration == "":
-		return false, errors.New("fields can't be empty")
-	case product.Quantity <= 0 || product.Price <= 0:
-		if product.Quantity <= 0 {
-			return false, errors.New("quantity must be greater than 0")
+func (h *dentistHandler) ReadByEnrollment() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		dentist, err := h.s.ReadByEnrollment(ctx.Param("enrollment"))
+		if err != nil {
+			web.Failure(ctx, http.StatusNotFound, err)
+			return
 		}
-		if product.Price <= 0 {
-			return false, errors.New("price must be greater than 0")
-		}
+		web.Success(ctx, http.StatusOK, dentist)
 	}
-	return true, nil
 }
 
-// validateExpiration valida que la fecha de expiracion sea valida
-func validateExpiration(exp string) (bool, error) {
-	dates := strings.Split(exp, "/")
-	list := []int{}
-	if len(dates) != 3 {
-		return false, errors.New("invalid expiration date, must be in format: dd/mm/yyyy")
-	}
-	for value := range dates {
-		number, err := strconv.Atoi(dates[value])
+func (h *dentistHandler) Create() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var dentist domain.Dentist
+		err := ctx.ShouldBindJSON(&dentist)
 		if err != nil {
-			return false, errors.New("invalid expiration date, must be numbers")
-		}
-		list = append(list, number)
-	}
-	condition := (list[0] < 1 || list[0] > 31) && (list[1] < 1 || list[1] > 12) && (list[2] < 1 || list[2] > 9999)
-	if condition {
-		return false, errors.New("invalid expiration date, date must be between 1 and 31/12/9999")
-	}
-	return true, nil
-}
-
-// Post crea un nuevo producto
-func (h *productHandler) Post() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var product domain.Product
-		token := c.GetHeader("TOKEN")
-		if token == "" {
-			web.Failure(c, 401, errors.New("token not found"))
+			web.Failure(ctx, http.StatusUnprocessableEntity, errors.New("invalid json"))
 			return
 		}
-		if token != os.Getenv("TOKEN") {
-			web.Failure(c, 401, errors.New("invalid token"))
-			return
-		}
-		err := c.ShouldBindJSON(&product)
-		if err != nil {
-			web.Failure(c, 400, errors.New("invalid json"))
-			return
-		}
-		valid, err := validateEmptys(&product)
+		valid, err := validateEmptyValues(&dentist)
 		if !valid {
-			web.Failure(c, 400, err)
+			web.Failure(ctx, http.StatusUnprocessableEntity, err)
 			return
 		}
-		valid, err = validateExpiration(product.Expiration)
-		if !valid {
-			web.Failure(c, 400, err)
-			return
-		}
-		p, err := h.s.Create(product)
+		createdDentist, err := h.s.Create(dentist)
 		if err != nil {
-			web.Failure(c, 400, err)
+			web.Failure(ctx, http.StatusInternalServerError, err)
 			return
 		}
-		web.Success(c, 201, p)
+		web.Success(ctx, http.StatusCreated, createdDentist)
 	}
 }
 
-// Delete elimina un producto
-func (h *productHandler) Delete() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.GetHeader("TOKEN")
-		if token == "" {
-			web.Failure(c, 401, errors.New("token not found"))
-			return
-		}
-		if token != os.Getenv("TOKEN") {
-			web.Failure(c, 401, errors.New("invalid token"))
-			return
-		}
-		idParam := c.Param("id")
-		id, err := strconv.Atoi(idParam)
+func (h *dentistHandler) Update() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.Atoi(ctx.Param("id"))
 		if err != nil {
-			web.Failure(c, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
+			return
+		}
+		var dentist domain.Dentist
+		err = ctx.ShouldBindJSON(&dentist)
+		if err != nil {
+			web.Failure(ctx, http.StatusUnprocessableEntity, errors.New("invalid json"))
+			return
+		}
+		valid, err := validateEmptyValues(&dentist)
+		if !valid {
+			web.Failure(ctx, http.StatusUnprocessableEntity, err)
+			return
+		}
+		createdDentist, err := h.s.Update(id, dentist)
+		if err != nil {
+			web.Failure(ctx, http.StatusInternalServerError, err)
+			return
+		}
+		web.Success(ctx, http.StatusCreated, createdDentist)
+	}
+}
+
+func (h *dentistHandler) Patch() gin.HandlerFunc {
+	type Request struct {
+		Name       string `json:"name,omitempty"`
+		LastName   string `json:"last_name,omitempty"`
+		Enrollment string `json:"enrollment,omitempty"`
+	}
+	return func(ctx *gin.Context) {
+		var request Request
+		id, err := strconv.Atoi(ctx.Param("id"))
+		if err != nil {
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
+			return
+		}
+		if err := ctx.ShouldBindJSON(&request); err != nil {
+			web.Failure(ctx, http.StatusUnprocessableEntity, errors.New("invalid json"))
+			return
+		}
+
+		update := domain.Dentist{
+			Name:       request.Name,
+			LastName:   request.LastName,
+			Enrollment: request.Enrollment,
+		}
+
+		updatedDentist, err := h.s.Patch(id, update)
+		if err.Error() == "dentist not found" {
+			web.Failure(ctx, http.StatusNotFound, err)
+			return
+		}
+		if err != nil {
+			web.Failure(ctx, http.StatusInternalServerError, err)
+			return
+		}
+
+		web.Success(ctx, http.StatusOK, updatedDentist)
+	}
+}
+
+func (h *dentistHandler) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.Atoi(ctx.Param("id"))
+		if err != nil {
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		err = h.s.Delete(id)
-		if err != nil {
-			web.Failure(c, 404, err)
+		if err.Error() == "dentist not found" {
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(c, 204, nil)
+		if err != nil {
+			web.Failure(ctx, http.StatusInternalServerError, err)
+			return
+		}
+
+		web.Success(ctx, http.StatusNoContent, nil)
 	}
 }
 
-// Put actualiza un producto
-func (h *productHandler) Put() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.GetHeader("TOKEN")
-		if token == "" {
-			web.Failure(c, 401, errors.New("token not found"))
-			return
-		}
-		if token != os.Getenv("TOKEN") {
-			web.Failure(c, 401, errors.New("invalid token"))
-			return
-		}
-		idParam := c.Param("id")
-		id, err := strconv.Atoi(idParam)
-		if err != nil {
-			web.Failure(c, 400, errors.New("invalid id"))
-			return
-		}
-		_, err = h.s.GetByID(id)
-		if err != nil {
-			web.Failure(c, 404, errors.New("product not found"))
-			return
-		}
-		if err != nil {
-			web.Failure(c, 409, err)
-			return
-		}
-		var product domain.Product
-		err = c.ShouldBindJSON(&product)
-		if err != nil {
-			web.Failure(c, 400, errors.New("invalid json"))
-			return
-		}
-		valid, err := validateEmptys(&product)
-		if !valid {
-			web.Failure(c, 400, err)
-			return
-		}
-		valid, err = validateExpiration(product.Expiration)
-		if !valid {
-			web.Failure(c, 400, err)
-			return
-		}
-		p, err := h.s.Update(id, product)
-		if err != nil {
-			web.Failure(c, 409, err)
-			return
-		}
-		web.Success(c, 200, p)
+func validateEmptyValues(dentist *domain.Dentist) (bool, error) {
+	switch {
+	case dentist.Name == "" || dentist.LastName == "" || dentist.Enrollment == "":
+		return false, errors.New("fields can't be empty")
 	}
-}
-
-// Patch actualiza un producto o alguno de sus campos
-func (h *productHandler) Patch() gin.HandlerFunc {
-	type Request struct {
-		Name        string  `json:"name,omitempty"`
-		Quantity    int     `json:"quantity,omitempty"`
-		CodeValue   string  `json:"code_value,omitempty"`
-		IsPublished bool    `json:"is_published,omitempty"`
-		Expiration  string  `json:"expiration,omitempty"`
-		Price       float64 `json:"price,omitempty"`
-	}
-	return func(c *gin.Context) {
-		token := c.GetHeader("TOKEN")
-		if token == "" {
-			web.Failure(c, 401, errors.New("token not found"))
-			return
-		}
-		if token != os.Getenv("TOKEN") {
-			web.Failure(c, 401, errors.New("invalid token"))
-			return
-		}
-		var r Request
-		idParam := c.Param("id")
-		id, err := strconv.Atoi(idParam)
-		if err != nil {
-			web.Failure(c, 400, errors.New("invalid id"))
-			return
-		}
-		_, err = h.s.GetByID(id)
-		if err != nil {
-			web.Failure(c, 404, errors.New("product not found"))
-			return
-		}
-		if err := c.ShouldBindJSON(&r); err != nil {
-			web.Failure(c, 400, errors.New("invalid json"))
-			return
-		}
-		update := domain.Product{
-			Name:        r.Name,
-			Quantity:    r.Quantity,
-			CodeValue:   r.CodeValue,
-			IsPublished: r.IsPublished,
-			Expiration:  r.Expiration,
-			Price:       r.Price,
-		}
-		if update.Expiration != "" {
-			valid, err := validateExpiration(update.Expiration)
-			if !valid {
-				web.Failure(c, 400, err)
-				return
-			}
-		}
-		p, err := h.s.Update(id, update)
-		if err != nil {
-			web.Failure(c, 409, err)
-			return
-		}
-		web.Success(c, 200, p)
-	}
+	return true, nil
 }

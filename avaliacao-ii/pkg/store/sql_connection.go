@@ -8,7 +8,7 @@ import (
 )
 
 func NewSQLStore() *sql.DB {
-	database, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/my_db")
+	database, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/avaliacao-ii")
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -7,9 +7,10 @@ import (
 
 type Service interface {
 	ReadById(id int) (domain.Dentist, error)
+	ReadByEnrollment(enrollment string) (domain.Dentist, error)
 	Create(dentist domain.Dentist) (domain.Dentist, error)
-	Update(dentist domain.Dentist) (domain.Dentist, error)
-	Patch(dentist domain.Dentist) (domain.Dentist, error)
+	Update(id int, dentist domain.Dentist) (domain.Dentist, error)
+	Patch(id int, dentist domain.Dentist) (domain.Dentist, error)
 	Delete(id int) error
 }
 
@@ -22,56 +23,64 @@ func NewService(r Repository) Service {
 }
 
 func (s *service) ReadById(id int) (domain.Dentist, error) {
-
+	dentist, err := s.r.ReadById(id)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	return dentist, nil
 }
+
+func (s *service) ReadByEnrollment(enrollment string) (domain.Dentist, error) {
+	dentist, err := s.r.ReadByEnrollment(enrollment)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	return dentist, nil
+}
+
 func (s *service) Create(dentist domain.Dentist) (domain.Dentist, error) {
-	
+	persistedDentist, err := s.ReadByEnrollment(dentist.Enrollment)
+	if dentist.Enrollment == persistedDentist.Enrollment {
+		return domain.Dentist{}, errors.New("enrollment already exists")
+	}
+
+	createdDentist, err := s.r.Create(dentist)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	return createdDentist, nil
 }
-func (s *service) Update(dentist domain.Dentist) (domain.Dentist, error) {
-	
+
+func (s *service) Update(id int, dentist domain.Dentist) (domain.Dentist, error) {
+	persistedDentist, err := s.ReadByEnrollment(dentist.Enrollment)
+	if dentist.Enrollment == persistedDentist.Enrollment {
+		return domain.Dentist{}, errors.New("enrollment already exists")
+	}
+
+	updatedDentist, err := s.r.Update(id, dentist)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	return updatedDentist, nil
 }
-func (s *service) Patch(dentist domain.Dentist) (domain.Dentist, error) {
-	
+
+func (s *service) Patch(id int, dentist domain.Dentist) (domain.Dentist, error) {
+	persistedDentist, err := s.ReadByEnrollment(dentist.Enrollment)
+	if dentist.Enrollment == persistedDentist.Enrollment {
+		return domain.Dentist{}, errors.New("enrollment already exists")
+	}
+
+	updatedDentist, err := s.r.Patch(id, dentist)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	return updatedDentist, nil
 }
+
 func (s *service) Delete(id int) error {
-	
-}
-
-func (r *repository) GetByID(id int) (domain.Product, error) {
-	product, err := r.storage.Read(id)
-	if err != nil {
-		return domain.Product{}, errors.New("product not found")
-	}
-	return product, nil
-
-}
-
-func (r *repository) Create(p domain.Product) (domain.Product, error) {
-	if !r.storage.Exists(p.CodeValue) {
-		return domain.Product{}, errors.New("code value already exists")
-	}
-	err := r.storage.Create(p)
-	if err != nil {
-		return domain.Product{}, errors.New("error creating product")
-	}
-	return p, nil
-}
-
-func (r *repository) Delete(id int) error {
-	err := r.storage.Delete(id)
+	err := s.r.Delete(id)
 	if err != nil {
 		return err
 	}
 	return nil
-}
-
-func (r *repository) Update(id int, p domain.Product) (domain.Product, error) {
-	if !r.storage.Exists(p.CodeValue) {
-		return domain.Product{}, errors.New("code value already exists")
-	}
-	err := r.storage.Update(p)
-	if err != nil {
-		return domain.Product{}, errors.New("error updating product")
-	}
-	return p, nil
 }

@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"avaliacao-ii/internal/domain"
 	"avaliacao-ii/internal/appointment"
 	"avaliacao-ii/pkg/web"
 	"github.com/gin-gonic/gin"
@@ -22,25 +21,27 @@ func NewAppointmentHandler(s appointment.Service) *appointmentHandler {
 	}
 }
 
-func (h *appointmentHandler) ReadById(id int) gin.HandlerFunc {
+func (h *appointmentHandler) ReadById() gin.HandlerFunc {
 
 }
-func (h *appointmentHandler) ReadByRg(rg string) gin.HandlerFunc {
+
+func (h *appointmentHandler) CreateById() gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) CreateById(appointment domain.Appointment, idPatient int, idDentist int) gin.HandlerFunc {
+
+func (h *appointmentHandler) CreateByRgEnrollment() gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) gin.HandlerFunc {
+
+func (h *appointmentHandler) Update() gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) Update(appointment domain.Appointment) gin.HandlerFunc {
+
+func (h *appointmentHandler) Patch() gin.HandlerFunc {
 	
 }
-func (h *appointmentHandler) Patch(appointment domain.Appointment) gin.HandlerFunc {
-	
-}
-func (h *appointmentHandler) Delete(id int) gin.HandlerFunc {
+
+func (h *appointmentHandler) Delete() gin.HandlerFunc {
 	
 }
 

@@ -7,7 +7,6 @@ import (
 
 type Service interface {
 	ReadById(id int) (domain.Appointment, error)
-	ReadByRg(rg string) (domain.Appointment, error)
 	CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
 	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error)
 	Update(appointment domain.Appointment) (domain.Appointment, error)
@@ -26,21 +25,23 @@ func NewService(r Repository) Service {
 func (s *service) ReadById(id int) (domain.Appointment, error) {
 
 }
-func (s *service) ReadByRg(rg string) (domain.Appointment, error) {
-	
-}
+
 func (s *service) CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error) {
 	
 }
+
 func (s *service) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error) {
 	
 }
+
 func (s *service) Update(appointment domain.Appointment) (domain.Appointment, error) {
 	
 }
+
 func (s *service) Patch(appointment domain.Appointment) (domain.Appointment, error) {
 	
 }
+
 func (s *service) Delete(id int) error {
 	
 }

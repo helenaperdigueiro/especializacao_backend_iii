@@ -44,6 +44,7 @@ func main() {
 	dentists := r.Group("/dentists")
 	{
 		dentists.GET(":id", dentistHandler.ReadById())
+		dentists.GET(":enrollment", dentistHandler.ReadByEnrollment())
 		dentists.POST("", dentistHandler.Create())
 		dentists.PUT("", dentistHandler.Update())
 		dentists.PATCH("", dentistHandler.Patch())

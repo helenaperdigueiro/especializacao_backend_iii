@@ -8,9 +8,8 @@ import (
 
 type Repository interface {
 	ReadById(id int) (domain.Appointment, error)
-	ReadByRg(rg string) (domain.Appointment, error)
 	CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
-	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error)
+	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error)
 	Update(appointment domain.Appointment) (domain.Appointment, error)
 	Patch(appointment domain.Appointment) (domain.Appointment, error)
 	Delete(id int) error
@@ -27,21 +26,23 @@ func NewRepository(storage store.StoreInterfaceAppointment) Repository {
 func (r *repository) ReadById(id int) (domain.Appointment, error) {
 
 }
-func (r *repository) ReadByRg(rg string) (domain.Appointment, error) {
-	
-}
+
 func (r *repository) CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error) {
 	
 }
-func (r *repository) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error) {
+
+func (r *repository) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error) {
 	
 }
+
 func (r *repository) Update(appointment domain.Appointment) (domain.Appointment, error) {
 	
 }
+
 func (r *repository) Patch(appointment domain.Appointment) (domain.Appointment, error) {
 	
 }
+
 func (r *repository) Delete(id int) error {
 	
 }
