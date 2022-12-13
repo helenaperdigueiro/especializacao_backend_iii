@@ -1,13 +1,14 @@
 package dentist
 
 import (
-	"errors"
 	"avaliacao-ii/internal/domain"
+	"errors"
 )
 
 type Service interface {
 	ReadById(id int) (domain.Dentist, error)
 	ReadByEnrollment(enrollment string) (domain.Dentist, error)
+	ReadAll() ([]domain.Dentist, error)
 	Create(dentist domain.Dentist) (domain.Dentist, error)
 	Update(id int, dentist domain.Dentist) (domain.Dentist, error)
 	Patch(id int, dentist domain.Dentist) (domain.Dentist, error)
@@ -38,10 +39,24 @@ func (s *service) ReadByEnrollment(enrollment string) (domain.Dentist, error) {
 	return dentist, nil
 }
 
+func (s *service) ReadAll() ([]domain.Dentist, error) {
+	dentists, err := s.r.ReadAll()
+	if err != nil {
+		return []domain.Dentist{}, err
+	}
+	return dentists, nil
+}
+
 func (s *service) Create(dentist domain.Dentist) (domain.Dentist, error) {
-	persistedDentist, err := s.ReadByEnrollment(dentist.Enrollment)
-	if dentist.Enrollment == persistedDentist.Enrollment {
-		return domain.Dentist{}, errors.New("enrollment already exists")
+	dentists, err := s.ReadAll()
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+
+	for i := range dentists {
+		if dentists[i].Enrollment == dentist.Enrollment {
+			return domain.Dentist{}, errors.New("enrollment already exists")
+		}
 	}
 
 	createdDentist, err := s.r.Create(dentist)
@@ -52,9 +67,15 @@ func (s *service) Create(dentist domain.Dentist) (domain.Dentist, error) {
 }
 
 func (s *service) Update(id int, dentist domain.Dentist) (domain.Dentist, error) {
-	persistedDentist, err := s.ReadByEnrollment(dentist.Enrollment)
-	if dentist.Enrollment == persistedDentist.Enrollment {
-		return domain.Dentist{}, errors.New("enrollment already exists")
+	dentists, err := s.ReadAll()
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+
+	for i := range dentists {
+		if dentists[i].Enrollment == dentist.Enrollment {
+			return domain.Dentist{}, errors.New("enrollment already exists")
+		}
 	}
 
 	updatedDentist, err := s.r.Update(id, dentist)
@@ -65,9 +86,15 @@ func (s *service) Update(id int, dentist domain.Dentist) (domain.Dentist, error)
 }
 
 func (s *service) Patch(id int, dentist domain.Dentist) (domain.Dentist, error) {
-	persistedDentist, err := s.ReadByEnrollment(dentist.Enrollment)
-	if dentist.Enrollment == persistedDentist.Enrollment {
-		return domain.Dentist{}, errors.New("enrollment already exists")
+	dentists, err := s.ReadAll()
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+
+	for i := range dentists {
+		if dentists[i].Enrollment == dentist.Enrollment {
+			return domain.Dentist{}, errors.New("enrollment already exists")
+		}
 	}
 
 	updatedDentist, err := s.r.Patch(id, dentist)

@@ -67,6 +67,35 @@ func (s *sqlStoreDentist) ReadByEnrollment(enrollment string) (domain.Dentist, e
 	return dentist, nil
 }
 
+func (s *sqlStoreDentist) ReadAll() ([]domain.Dentist, error) {
+
+	queryGetAll := "SELECT id, name, last_name, enrollment FROM dentist"
+
+	var dentists []domain.Dentist
+	rows, err := s.db.Query(queryGetAll)
+	if err != nil {
+		return []domain.Dentist{}, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var dentist domain.Dentist
+
+		if err := rows.Scan(
+			&dentist.Id,
+			&dentist.Name,
+			&dentist.LastName,
+			&dentist.Enrollment,
+		); err != nil {
+			return dentists, err
+		}
+
+		dentists = append(dentists, dentist)
+	}
+	return dentists, nil
+}
+
 func (s *sqlStoreDentist) Create(dentist domain.Dentist) (domain.Dentist, error) {
 	queryInsert := "INSERT INTO dentist (name, last_name, enrollment) VALUES (?, ?, ?)"
 

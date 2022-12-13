@@ -13,6 +13,7 @@ type StoreInterfacePatient interface {
 type StoreInterfaceDentist interface {
 	ReadById(id int) (domain.Dentist, error)
 	ReadByEnrollment(enrollment string) (domain.Dentist, error)
+	ReadAll() ([]domain.Dentist, error)
 	Create(dentist domain.Dentist) (domain.Dentist, error)
 	Update(id int, dentist domain.Dentist) (domain.Dentist, error)
 	Patch(id int, dentist domain.Dentist) (domain.Dentist, error)

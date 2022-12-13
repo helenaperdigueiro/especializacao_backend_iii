@@ -8,6 +8,7 @@ import (
 type Repository interface {
 	ReadById(id int) (domain.Dentist, error)
 	ReadByEnrollment(enrollment string) (domain.Dentist, error)
+	ReadAll() ([]domain.Dentist, error)
 	Create(dentist domain.Dentist) (domain.Dentist, error)
 	Update(id int, dentist domain.Dentist) (domain.Dentist, error)
 	Patch(id int, dentist domain.Dentist) (domain.Dentist, error)
@@ -36,6 +37,14 @@ func (r *repository) ReadByEnrollment(enrollment string) (domain.Dentist, error)
 		return domain.Dentist{}, err
 	}
 	return dentist, nil
+}
+
+func (r *repository) ReadAll() ([]domain.Dentist, error) {
+	dentists, err := r.storage.ReadAll()
+	if err != nil {
+		return []domain.Dentist{}, err
+	}
+	return dentists, nil
 }
 
 func (r *repository) Create(dentist domain.Dentist) (domain.Dentist, error) {

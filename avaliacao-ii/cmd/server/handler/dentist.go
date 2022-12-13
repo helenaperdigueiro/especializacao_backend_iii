@@ -3,9 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
-	"os"
 	"strconv"
-	"strings"
 
 	"avaliacao-ii/internal/dentist"
 	"avaliacao-ii/internal/domain"
@@ -125,10 +123,6 @@ func (h *dentistHandler) Patch() gin.HandlerFunc {
 		}
 
 		updatedDentist, err := h.s.Patch(id, update)
-		if err.Error() == "dentist not found" {
-			web.Failure(ctx, http.StatusNotFound, err)
-			return
-		}
 		if err != nil {
 			web.Failure(ctx, http.StatusInternalServerError, err)
 			return
@@ -146,12 +140,8 @@ func (h *dentistHandler) Delete() gin.HandlerFunc {
 			return
 		}
 		err = h.s.Delete(id)
-		if err.Error() == "dentist not found" {
-			web.Failure(ctx, http.StatusNotFound, err)
-			return
-		}
 		if err != nil {
-			web.Failure(ctx, http.StatusInternalServerError, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
 
