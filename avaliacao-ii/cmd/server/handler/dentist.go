@@ -57,7 +57,7 @@ func (h *dentistHandler) Create() gin.HandlerFunc {
 			web.Failure(ctx, http.StatusUnprocessableEntity, errors.New("invalid json"))
 			return
 		}
-		valid, err := validateEmptyValues(&dentist)
+		valid, err := validateEmptyValuesDentist(&dentist)
 		if !valid {
 			web.Failure(ctx, http.StatusUnprocessableEntity, err)
 			return
@@ -84,7 +84,7 @@ func (h *dentistHandler) Update() gin.HandlerFunc {
 			web.Failure(ctx, http.StatusUnprocessableEntity, errors.New("invalid json"))
 			return
 		}
-		valid, err := validateEmptyValues(&dentist)
+		valid, err := validateEmptyValuesDentist(&dentist)
 		if !valid {
 			web.Failure(ctx, http.StatusUnprocessableEntity, err)
 			return
@@ -149,7 +149,7 @@ func (h *dentistHandler) Delete() gin.HandlerFunc {
 	}
 }
 
-func validateEmptyValues(dentist *domain.Dentist) (bool, error) {
+func validateEmptyValuesDentist(dentist *domain.Dentist) (bool, error) {
 	switch {
 	case dentist.Name == "" || dentist.LastName == "" || dentist.Enrollment == "":
 		return false, errors.New("fields can't be empty")

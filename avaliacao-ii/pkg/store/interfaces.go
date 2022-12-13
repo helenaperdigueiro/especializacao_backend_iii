@@ -4,9 +4,11 @@ import "avaliacao-ii/internal/domain"
 
 type StoreInterfacePatient interface {
 	ReadById(id int) (domain.Patient, error)
+	ReadByRg(rg string) (domain.Patient, error)
+	ReadAll() ([]domain.Patient, error)
 	Create(patient domain.Patient) (domain.Patient, error)
-	Update(patient domain.Patient) (domain.Patient, error)
-	Patch(patient domain.Patient) (domain.Patient, error)
+	Update(id int, patient domain.Patient) (domain.Patient, error)
+	Patch(id int, patient domain.Patient) (domain.Patient, error)
 	Delete(id int) error
 }
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"avaliacao-ii/cmd/server/handler"
-	// "avaliacao-ii/internal/patient"
+	"avaliacao-ii/internal/patient"
 	"avaliacao-ii/internal/dentist"
 	// "avaliacao-ii/internal/appointment"
 	"avaliacao-ii/pkg/store"
@@ -15,20 +15,20 @@ func main() {
 
 	sqlStore := store.NewSQLStore();
 
-	// sqlStoragePatient := store.NewSQLStorePatient(sqlStore)
-	// repoPatient := patient.NewRepository(sqlStoragePatient)
-	// servicePatient := patient.NewService(repoPatient)
-	// patientHandler := handler.NewPatientHandler(servicePatient)
+	sqlStoragePatient := store.NewSQLStorePatient(sqlStore)
+	repoPatient := patient.NewRepository(sqlStoragePatient)
+	servicePatient := patient.NewService(repoPatient)
+	patientHandler := handler.NewPatientHandler(servicePatient)
 
-	// r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
-	// patients := r.Group("/patients")
-	// {
-	// 	patients.GET(":id", patientHandler.ReadById())
-	// 	patients.POST("", patientHandler.Create())
-	// 	patients.PUT("", patientHandler.Update())
-	// 	patients.PATCH("", patientHandler.Patch())
-	// 	patients.DELETE(":id", patientHandler.Delete())
-	// }
+	patients := r.Group("/patients")
+	{
+		patients.GET("/id/:id", patientHandler.ReadById())
+		patients.GET("/rg/:rg", patientHandler.ReadByRg())
+		patients.POST("", patientHandler.Create())
+		patients.PUT(":id", patientHandler.Update())
+		patients.PATCH(":id", patientHandler.Patch())
+		patients.DELETE(":id", patientHandler.Delete())
+	}
 
 	sqlStorageDentist := store.NewSQLStoreDentist(sqlStore)
 	repoDentist := dentist.NewRepository(sqlStorageDentist)
