@@ -4,7 +4,7 @@ import (
 	"avaliacao-ii/cmd/server/handler"
 	"avaliacao-ii/internal/patient"
 	"avaliacao-ii/internal/dentist"
-	// "avaliacao-ii/internal/appointment"
+	"avaliacao-ii/internal/appointment"
 	"avaliacao-ii/pkg/store"
 	"github.com/gin-gonic/gin"
 )
@@ -45,21 +45,21 @@ func main() {
 		dentists.DELETE(":id", dentistHandler.Delete())
 	}
 
-	// sqlStorageAppointment := store.NewSQLStoreAppointment(sqlStore)
-	// repoAppointment := appointment.NewRepository(sqlStorageAppointment)
-	// serviceAppointment := appointment.NewService(repoAppointment)
-	// appointmentHandler := handler.NewAppointmentHandler(serviceAppointment)
+	sqlStorageAppointment := store.NewSQLStoreAppointment(sqlStore)
+	repoAppointment := appointment.NewRepository(sqlStorageAppointment)
+	serviceAppointment := appointment.NewService(repoAppointment)
+	appointmentHandler := handler.NewAppointmentHandler(serviceAppointment)
 
-	// r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
-	// appointments := r.Group("/appointments")
-	// {
-	// 	appointments.GET(":id", appointmentHandler.ReadById())
-	// 	appointments.POST("/id", appointmentHandler.CreateById())
-	// 	appointments.POST("/rg-enrollment", appointmentHandler.CreateByRgEnrollment())
-	// 	appointments.PUT("", appointmentHandler.Update())
-	// 	appointments.PATCH("", appointmentHandler.Patch())
-	// 	appointments.DELETE(":id", appointmentHandler.Delete())
-	// }
+	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
+	appointments := r.Group("/appointments")
+	{
+		appointments.GET("id/:id", appointmentHandler.ReadById())
+		// appointments.POST("/id", appointmentHandler.CreateById())
+		// appointments.POST("/rg-enrollment", appointmentHandler.CreateByRgEnrollment())
+		// appointments.PUT("", appointmentHandler.Update())
+		// appointments.PATCH("", appointmentHandler.Patch())
+		// appointments.DELETE(":id", appointmentHandler.Delete())
+	}
 
 	r.Run(":8080")
 }
