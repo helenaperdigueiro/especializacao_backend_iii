@@ -53,7 +53,8 @@ func main() {
 	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
 	appointments := r.Group("/appointments")
 	{
-		appointments.GET("id/:id", appointmentHandler.ReadById())
+		appointments.GET("/id/:id", appointmentHandler.ReadById())
+		appointments.GET("/rg/:rg", appointmentHandler.ReadByRg())
 		// appointments.POST("/id", appointmentHandler.CreateById())
 		// appointments.POST("/rg-enrollment", appointmentHandler.CreateByRgEnrollment())
 		// appointments.PUT("", appointmentHandler.Update())

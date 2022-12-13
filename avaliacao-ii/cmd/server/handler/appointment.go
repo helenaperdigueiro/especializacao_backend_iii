@@ -38,6 +38,18 @@ func (h *appointmentHandler) ReadById() gin.HandlerFunc {
 	}
 }
 
+func (h *appointmentHandler) ReadByRg() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		rg := ctx.Param("rg")
+		appointment, err := h.s.ReadByRg(rg)
+		if err != nil {
+			web.Failure(ctx, http.StatusNotFound, err)
+			return
+		}
+		web.Success(ctx, http.StatusOK, appointment)
+	}
+}
+
 // func (h *appointmentHandler) CreateById() gin.HandlerFunc {
 	
 // }

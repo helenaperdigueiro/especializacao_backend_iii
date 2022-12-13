@@ -7,6 +7,7 @@ import (
 
 type Repository interface {
 	ReadById(id int) (domain.Appointment, error)
+	ReadByRg(rg string) (domain.Appointment, error)
 	// CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
 	// CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error)
 	// Update(appointment domain.Appointment) (domain.Appointment, error)
@@ -24,6 +25,14 @@ func NewRepository(storage store.StoreInterfaceAppointment) Repository {
 
 func (r *repository) ReadById(id int) (domain.Appointment, error) {
 	appointment, err := r.storage.ReadById(id)
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+	return appointment, nil
+}
+
+func (r *repository) ReadByRg(rg string) (domain.Appointment, error) {
+	appointment, err := r.storage.ReadByRg(rg)
 	if err != nil {
 		return domain.Appointment{}, err
 	}

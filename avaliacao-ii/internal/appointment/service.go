@@ -6,6 +6,7 @@ import (
 
 type Service interface {
 	ReadById(id int) (domain.Appointment, error)
+	ReadByRg(rg string) (domain.Appointment, error)
 	// CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
 	// CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error)
 	// Update(appointment domain.Appointment) (domain.Appointment, error)
@@ -23,6 +24,14 @@ func NewService(r Repository) Service {
 
 func (s *service) ReadById(id int) (domain.Appointment, error) {
 	appointment, err := s.r.ReadById(id)
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+	return appointment, nil
+}
+
+func (s *service) ReadByRg(rg string) (domain.Appointment, error) {
+	appointment, err := s.r.ReadByRg(rg)
 	if err != nil {
 		return domain.Appointment{}, err
 	}
