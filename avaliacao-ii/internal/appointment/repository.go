@@ -9,10 +9,10 @@ type Repository interface {
 	ReadById(id int) (domain.Appointment, error)
 	ReadByRg(rg string) ([]domain.Appointment, error)
 	CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
-	// CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error)
+	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error)
 	Update(id int, appointment domain.Appointment) (domain.Appointment, error)
 	Patch(id int, appointment domain.Appointment) (domain.Appointment, error)
-	// Delete(id int) error
+	Delete(id int) error
 }
 
 type repository struct {
@@ -47,9 +47,13 @@ func (r *repository) CreateById(appointment domain.Appointment, idPatient int, i
 	return createdAppointment, nil
 }
 
-// func (r *repository) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error) {
-	
-// }
+func (r *repository) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error) {
+	createdAppointment, err := r.storage.CreateByRgEnrollment(appointment, rgPatient, enrollmentDentist)
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+	return createdAppointment, nil
+}
 
 func (r *repository) Update(id int, appointment domain.Appointment) (domain.Appointment, error) {
 	updatedAppointment, err := r.storage.Update(id, appointment)
@@ -67,6 +71,10 @@ func (r *repository) Patch(id int, appointment domain.Appointment) (domain.Appoi
 	return updatedAppointment, nil
 }
 
-// func (r *repository) Delete(id int) error {
-	
-// }
+func (r *repository) Delete(id int) error {
+	err := r.storage.Delete(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

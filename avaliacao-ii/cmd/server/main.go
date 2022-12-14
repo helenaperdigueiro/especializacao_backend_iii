@@ -54,11 +54,11 @@ func main() {
 	{
 		appointments.GET("/id/:id", appointmentHandler.ReadById())
 		appointments.GET("/rg/:rg", appointmentHandler.ReadByRg())
-		appointments.POST(":id-patient/:id-dentist", appointmentHandler.CreateById())
-		// appointments.POST("/rg-enrollment", appointmentHandler.CreateByRgEnrollment())
+		appointments.POST("/id/:id-patient/:id-dentist", appointmentHandler.CreateById())
+		appointments.POST("/rg-enrollment/:rg-patient/:enrollment-dentist", appointmentHandler.CreateByRgEnrollment())
 		appointments.PUT(":id", appointmentHandler.Update())
 		appointments.PATCH(":id", appointmentHandler.Patch())
-		// appointments.DELETE(":id", appointmentHandler.Delete())
+		appointments.DELETE(":id", appointmentHandler.Delete())
 	}
 
 	r.Run(":8080")

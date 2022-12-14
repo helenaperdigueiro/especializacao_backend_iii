@@ -141,9 +141,47 @@ func (s *sqlStoreAppointment) CreateById(appointment domain.Appointment, idPatie
 	return appointment, nil
 }
 
-// func (s *sqlStoreAppointment) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error) {
+func (s *sqlStoreAppointment) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error) {
+	queryInsert := `INSERT INTO appointment (patient_id, dentist_id, date, description)
+					VALUES ((SELECT patient.id FROM patient WHERE patient.rg = ?), 
+					(SELECT dentist.id FROM dentist WHERE dentist.enrollment = ?), 
+					?, ?)`
 
-// }
+	stmt, err := s.db.Prepare(queryInsert)
+
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(
+		rgPatient,
+		enrollmentDentist,
+		appointment.Date,
+		appointment.Description)
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+
+	RowsAffected, _ := res.RowsAffected()
+	if RowsAffected == 0 {
+		return domain.Appointment{}, errors.New("fail to save appointment")
+	}
+
+	lastId, err := res.LastInsertId()
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+
+	appointment.Id = int(lastId)
+
+	appointment, err = s.ReadById(appointment.Id)
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+
+	return appointment, nil
+}
 
 func (s *sqlStoreAppointment) Update(id int, appointment domain.Appointment) (domain.Appointment, error) {
 	queryUpdate  := "UPDATE appointment SET patient_id = ?, dentist_id = ?, date = ?, description = ? WHERE id = ?"
@@ -231,6 +269,23 @@ func (s *sqlStoreAppointment) Patch(id int, appointment domain.Appointment) (dom
 	return appointment, nil
 }
 
-// func (s *sqlStoreAppointment) Delete(id int) error {
+func (s *sqlStoreAppointment) Delete(id int) error {
+	queryDelete := "DELETE FROM appointment WHERE id = ?"
 
-// }
+	result, err := s.db.Exec(queryDelete, id)
+	if err != nil {
+		return err
+	}
+
+	affectedRows, err := result.RowsAffected()
+
+	if affectedRows == 0 {
+		return errors.New("appointment not found")
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

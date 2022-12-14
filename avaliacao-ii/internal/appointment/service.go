@@ -8,10 +8,10 @@ type Service interface {
 	ReadById(id int) (domain.Appointment, error)
 	ReadByRg(rg string) ([]domain.Appointment, error)
 	CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
-	// CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error)
+	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error)
 	Update(id int, appointment domain.Appointment) (domain.Appointment, error)
 	Patch(id int, appointment domain.Appointment) (domain.Appointment, error)
-	// Delete(id int) error
+	Delete(id int) error
 }
 
 type service struct {
@@ -46,9 +46,13 @@ func (s *service) CreateById(appointment domain.Appointment, idPatient int, idDe
 	return createdAppointment, nil
 }
 
-// func (s *service) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error) {
-	
-// }
+func (s *service) CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error) {
+	createdAppointment, err := s.r.CreateByRgEnrollment(appointment, rgPatient, enrollmentDentist)
+	if err != nil {
+		return domain.Appointment{}, err
+	}
+	return createdAppointment, nil
+}
 
 func (s *service) Update(id int, appointment domain.Appointment) (domain.Appointment, error) {
 	updatedAppointment, err := s.r.Update(id, appointment)
@@ -66,6 +70,11 @@ func (s *service) Patch(id int, appointment domain.Appointment) (domain.Appointm
 	return updatedAppointment, nil
 }
 
-// func (s *service) Delete(id int) error {
-	
-// }
+func (s *service) Delete(id int) error {
+	err := s.r.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

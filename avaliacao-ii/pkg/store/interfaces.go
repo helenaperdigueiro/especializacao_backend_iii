@@ -25,10 +25,9 @@ type StoreInterfaceDentist interface {
 type StoreInterfaceAppointment interface {
 	ReadById(id int) (domain.Appointment, error)
 	ReadByRg(rg string) ([]domain.Appointment, error)
-	// ReadAll() ([]domain.Appointment, error)
 	CreateById(appointment domain.Appointment, idPatient int, idDentist int) (domain.Appointment, error)
-	// CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollment string) (domain.Appointment, error)
+	CreateByRgEnrollment(appointment domain.Appointment, rgPatient string, enrollmentDentist string) (domain.Appointment, error)
 	Update(id int, appointment domain.Appointment) (domain.Appointment, error)
 	Patch(id int, appointment domain.Appointment) (domain.Appointment, error)
-	// Delete(id int) error
+	Delete(id int) error
 }

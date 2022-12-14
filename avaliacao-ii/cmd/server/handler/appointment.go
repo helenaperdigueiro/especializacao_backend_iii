@@ -95,9 +95,39 @@ func (h *appointmentHandler) CreateById() gin.HandlerFunc {
 	}
 }
 
-// func (h *appointmentHandler) CreateByRgEnrollment() gin.HandlerFunc {
+func (h *appointmentHandler) CreateByRgEnrollment() gin.HandlerFunc {
+	type Request struct {
+		Date        string `json:"date" binding:"required"`
+		Description string `json:"description" binding:"required"`
+	}
+	return func(ctx *gin.Context) {
+		var request Request
+		rgPatient := ctx.Param("rg-patient")
+		enrollmentDentist := ctx.Param("enrollment-dentist")
 
-// }
+		err := ctx.ShouldBindJSON(&request)
+		if err != nil {
+			web.Failure(ctx, http.StatusUnprocessableEntity, errors.New("invalid json"))
+			return
+		}
+		appointment := domain.Appointment{
+			Date:        request.Date,
+			Description: request.Description,
+		}
+		valid, err := validateEmptyValuesAppointment(&appointment)
+		if !valid {
+			web.Failure(ctx, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		createdAppointment, err := h.s.CreateByRgEnrollment(appointment, rgPatient, enrollmentDentist)
+		if err != nil {
+			web.Failure(ctx, http.StatusInternalServerError, err)
+			return
+		}
+		web.Success(ctx, http.StatusCreated, createdAppointment)
+	}
+}
 
 func (h *appointmentHandler) Update() gin.HandlerFunc {
 	type Request struct {
@@ -179,9 +209,22 @@ func (h *appointmentHandler) Patch() gin.HandlerFunc {
 	}
 }
 
-// func (h *appointmentHandler) Delete() gin.HandlerFunc {
+func (h *appointmentHandler) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.Atoi(ctx.Param("id"))
+		if err != nil {
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
+			return
+		}
+		err = h.s.Delete(id)
+		if err != nil {
+			web.Failure(ctx, http.StatusNotFound, err)
+			return
+		}
 
-// }
+		web.Success(ctx, http.StatusNoContent, nil)
+	}
+}
 
 func validateEmptyValuesAppointment(appointment *domain.Appointment) (bool, error) {
 	switch {
