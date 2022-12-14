@@ -50,15 +50,14 @@ func main() {
 	serviceAppointment := appointment.NewService(repoAppointment)
 	appointmentHandler := handler.NewAppointmentHandler(serviceAppointment)
 
-	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
 	appointments := r.Group("/appointments")
 	{
 		appointments.GET("/id/:id", appointmentHandler.ReadById())
 		appointments.GET("/rg/:rg", appointmentHandler.ReadByRg())
-		// appointments.POST("/id", appointmentHandler.CreateById())
+		appointments.POST(":id-patient/:id-dentist", appointmentHandler.CreateById())
 		// appointments.POST("/rg-enrollment", appointmentHandler.CreateByRgEnrollment())
-		// appointments.PUT("", appointmentHandler.Update())
-		// appointments.PATCH("", appointmentHandler.Patch())
+		appointments.PUT(":id", appointmentHandler.Update())
+		appointments.PATCH(":id", appointmentHandler.Patch())
 		// appointments.DELETE(":id", appointmentHandler.Delete())
 	}
 
