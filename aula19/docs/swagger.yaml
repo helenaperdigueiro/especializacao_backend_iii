@@ -1,0 +1,13 @@
+info:
+  contact:
+    name: Public APIs
+    url: https://dev.publicapis.ml
+  description: This API handle products from our store
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://publicapis.ml/terms
+  title: Store API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
