@@ -105,13 +105,13 @@
 			"response": []
 		},
 		{
-			"name": "appointment",
+			"name": "appointment id",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Sakura\",\r\n    \"last_name\": \"Leal\",\r\n    \"rg\": \"002\",\r\n    \"register_date\": \"14/12/2022\"\r\n}",
+					"raw": "{\r\n    \"date\": \"14/12/2022\",\r\n    \"description\": \"Dentes!!\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -119,14 +119,48 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/appointments",
+					"raw": "http://localhost:8080/appointments/id/2/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"appointments"
+						"appointments",
+						"id",
+						"2",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "appointment rg enrollment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"14/12/2022\",\r\n    \"description\": \"Limpeza profilatica!!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/appointments/rg-enrollment/123/001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"rg-enrollment",
+						"123",
+						"001"
 					]
 				}
 			},
@@ -139,7 +173,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Renata\",\r\n    \"last_name\": \"da Silva Leal\",\r\n    \"rg\": \"003\",\r\n    \"register_date\": \"15/12/2022\"\r\n}",
+					"raw": "{\r\n    \"patient_id\": 1,\r\n    \"dentist_id\": 4,\r\n    \"date\": \"14/12/2022\",\r\n    \"description\": \"Dentes muito cariados\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -147,7 +181,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/appointments/2",
+					"raw": "http://localhost:8080/appointments/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -155,7 +189,7 @@
 					"port": "8080",
 					"path": [
 						"appointments",
-						"2"
+						"3"
 					]
 				}
 			},
@@ -168,7 +202,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"last_name\": \"Sakura\"\r\n}",
+					"raw": "{\r\n    \"dentist_id\": 1,\r\n    \"description\": \"Limpeza profilatica\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -176,7 +210,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/appointments/2",
+					"raw": "http://localhost:8080/appointments/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -184,7 +218,7 @@
 					"port": "8080",
 					"path": [
 						"appointments",
-						"2"
+						"3"
 					]
 				}
 			},
@@ -205,7 +239,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/appointments/3",
+					"raw": "http://localhost:8080/appointments/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -213,7 +247,7 @@
 					"port": "8080",
 					"path": [
 						"appointments",
-						"3"
+						"1"
 					]
 				}
 			},

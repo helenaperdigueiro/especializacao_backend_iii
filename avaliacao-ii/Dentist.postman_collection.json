@@ -89,7 +89,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/dentists/enrollment/12345678901",
+					"raw": "http://localhost:8080/dentists/enrollment/001",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -98,7 +98,7 @@
 					"path": [
 						"dentists",
 						"enrollment",
-						"12345678901"
+						"001"
 					]
 				}
 			},
@@ -111,7 +111,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Juliana\",\r\n    \"last_name\": \"Leal\",\r\n    \"enrollment\": \"12345678901234\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Helena\",\r\n    \"last_name\": \"Perdigueiro\",\r\n    \"enrollment\": \"001\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -139,7 +139,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Juliana\",\r\n    \"last_name\": \"Leal da Silva\",\r\n    \"enrollment\": \"001\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Helena\",\r\n    \"last_name\": \"Martinez Perdigueiro\",\r\n    \"enrollment\": \"001\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -168,7 +168,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Abacaxi\",\r\n    \"enrollment\": \"002\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Pedro\",\r\n    \"enrollment\": \"002\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
